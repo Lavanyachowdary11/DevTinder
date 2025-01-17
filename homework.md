@@ -9,3 +9,6 @@
 - what are dependencies and devDependices?
 - whats is use of "-g"
 - Difference b/w ^ & ~ in package.json
+
+- Routes & Route extensions
+- order of the routes matter
