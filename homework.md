@@ -26,3 +26,9 @@
 - How express js basically handles request behind the scenes.
 - Difference between app.use() vs app.all()
 - write a dummy auth middleware for admin and user expect login
+- Error handling using app.use("/", (err,req,res,next) => {})
+
+- create a free cluster on Monogodb official website(Mongo Atlas).
+- Install mongoose library
+- Connect your appication to the database "connection-url"/devTinder
+- Call the connectDB function and connect to databse before starting the application on 3001
