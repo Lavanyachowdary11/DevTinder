@@ -19,9 +19,10 @@ app.post("/signup", async (req,res) => {
 
 //find only one user
 app.get("/user", async (req,res) => {
-    const userEmail= req.body.emailId;
+    const userId= req.body.id;
+    console.log(userId)
     try {
-        const user = await User.findOne({emailId: userEmail})
+        const user = await User.findById({_id: userId})
         if(!user) {
             res.status(404).send("user not found!")
         }else {
@@ -34,9 +35,9 @@ app.get("/user", async (req,res) => {
 
 //find user by email
 app.get("/user", async (req,res) => {
-    const userEmail= req.body.emailId;
+    const userEmail= req.body.id;
     try {
-        const users = await User.find({emailId: userEmail})
+        const users = await User.find({id: userEmail})
         if(users.length === 0){
             res.status(404).send("User not found!!");
         }else {
