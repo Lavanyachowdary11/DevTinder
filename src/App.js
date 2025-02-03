@@ -5,8 +5,11 @@ const User = require("./models/user")
 const {validateSignUpData} = require("./utils/validation")
 const bcrypt = require("bcrypt")
 const validator = require('validator')
+const cookieParser = require("cookie-parser")
+const jwt = require('jsonwebtoken')
 
 app.use(express.json())
+app.use(cookieParser())
 
 app.post("/signup", async (req,res) => {
     try {
@@ -15,7 +18,6 @@ app.post("/signup", async (req,res) => {
         const { firstName, lastName, emailId, password } = req.body;
         //encrypt the password
         const passwordHash = await bcrypt.hash(password, 10);
-        console.log(passwordHash)
 
         //creating new instance of a User model
         const user = new User({
@@ -44,6 +46,11 @@ app.post("/login", async (req,res) => {
         }
         const isPasswordValid = bcrypt.compare(password, user.password)
         if(isPasswordValid) {
+            //create a JWt token
+            const token = await jwt.sign({_id: user._id}, "DEV@TINDER$0706");
+
+            //Add the token to cookie and send the response back to the user
+            res.cookie("token", token)
             res.send("Login Successfull!!!")
         }else {
             throw new Error("Password not correct")
@@ -56,7 +63,6 @@ app.post("/login", async (req,res) => {
 //find only one user
 app.get("/user", async (req,res) => {
     const userId= req.body.id;
-    console.log(userId)
     try {
         const user = await User.findById({_id: userId})
         if(!user) {
@@ -66,6 +72,29 @@ app.get("/user", async (req,res) => {
         }
     }catch(err) {
         res.status(400).send("Something went wrong..")
+    }
+})
+
+app.get("/profile", async(req,res) => {
+    try {
+    const cookies = req.cookies;
+
+    const {token} = cookies
+    if(!token) {
+        throw new Error("Invalid token!!!");
+    }
+    //validate the token
+    const decodedMessage = await jwt.verify(token, "DEV@TINDER$0706")
+
+    const {_id} = decodedMessage
+
+    const user = await User.findById(_id)
+    if(!user) {
+        throw new Error("User doen't exists");
+    }
+    res.send(user)
+    }catch(err) {
+        res.status(400).send("Error:" + err.message)
     }
 })
 
