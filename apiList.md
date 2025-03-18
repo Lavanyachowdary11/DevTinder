@@ -18,7 +18,7 @@ connectionRequestRouter
 
 userRouter
 - get user/connections
-- get user/requests
+- get user/requests/recieved
 - get user/feed - Gets you the profiles of the other users on platform
 
 
