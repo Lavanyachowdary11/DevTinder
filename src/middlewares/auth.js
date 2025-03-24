@@ -6,7 +6,7 @@ try {
   const cookies = req.cookies;
   const {token} = cookies
   if(!token){
-    throw new Error("Token is invalid!!!!!!!!!")
+    return res.status(401).send("Please Login!!!")
   }
   // Validate the token
   const decodedObj = await jwt.verify(token, "DEV@TINDER$0706")
