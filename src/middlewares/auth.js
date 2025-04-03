@@ -9,7 +9,7 @@ try {
     return res.status(401).send("Please Login!!!")
   }
   // Validate the token
-  const decodedObj = await jwt.verify(token, "DEV@TINDER$0706")
+  const decodedObj = await jwt.verify(token, process.env.JWT_SECERET)
   const {_id} = decodedObj
   const user = await User.findById(_id)
   if(!user) {
